@@ -1,12 +1,17 @@
 CC = gcc
-AR = ar
-CFLAGS = -Wall
 
 OBJ = add.o sub.o mul.o div.o
-LIB = libmath.a
+LIB = libmath.so
 
-lib: $(OBJ)
-	$(AR) rcs $(LIB) $(OBJ)
+so:
+	$(CC) -fPIC -c add.c sub.c mul.c div.c
+	$(CC) -shared -o $(LIB) $(OBJ)
+
+app: so
+	$(CC) main.c -L. -lmath -o app
+
+run:
+	LD_LIBRARY_PATH=. ./app
 
 clean:
-	rm -f *.o *.a
+	rm -f *.o *.so app
